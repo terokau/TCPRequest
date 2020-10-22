@@ -1,13 +1,21 @@
 import requests
 import socketserver as soc
+import xml.etree.ElementTree as ET
 import sys
 
 def main():
-	host,port = '192.168.1.2',60000
+	
+	settings = ET.parse('conf.xml')
+	root = settings.getroot()
+	for i in root.findall('host'):
+		host = i.find('address').text
+		port = int(i.find('port').text)
+	print('Starting open of server: ' , host, ' : ' , port)
 	
 	with soc.TCPServer((host,port),TCPHandle) as server:
 		server.serve_forever()
 		
+
 class TCPHandle(soc.BaseRequestHandler):
 	
 	def handle(self):
