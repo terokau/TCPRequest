@@ -13,7 +13,7 @@ def main():
 	
 	print('Starting open of server: ' , host, ' : ' , port)
 
-	with soc.TCPServer((host,port),TCPHandle) as server:
+	with soc.TCPServer((host,port+1),TCPHandle) as server:
 		server.serve_forever()
 
 
@@ -61,7 +61,7 @@ class MyRequest():
 			return getResponse.text
 		except Exception as e:
 			print(e)
-			return 'Error on Request, '
+			return 'Error on Request'
 
 if __name__ == '__main__':
 	main()
