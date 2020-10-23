@@ -7,17 +7,14 @@ def main():
 
 	settings = ET.parse('conf.xml')
 	root = settings.getroot()
+	allowedHosts = []
 	
-	for child in root.findall('address'):
-		host = child.text
-
-	for child in root.findall('port'):
-		port = int(child.text)
-
-	#host = root.find('address').text
-	#port = int(root.find('port').text)
-	#host = 'localhost'
-	#port = 9000
+	host = root.find('address').text
+	port = int(root.find('port').text)
+	hosts = root.find('hosts')
+	for i in hosts.findall('host'):
+		print(i.get('address'))
+		allowedHosts.append(i.attrib)
 	print('Starting open of server: ' , host, ' : ' , port)
 
 	with soc.TCPServer((host,port),TCPHandle) as server:
@@ -28,12 +25,16 @@ class TCPHandle(soc.BaseRequestHandler):
 
 	def handle(self):
 		conn = MyRequest()
-		self.data = self.request.recv(2048).strip()
-		print('From: ' , format(self.client_address[0]))
-		print('Data: ' , self.data)
-		self.response = conn.getRequestData(self.data)
-		print('Reponse: ' , self.response)
-		self.request.sendall(str.encode(self.response))
+		getClientAddress = self.client_address[0]
+		if(getClientAddress in allowedHosts):
+			self.data = self.request.recv(2048).strip()
+			print('From: ' , format(self.client_address[0]))
+			print('Data: ' , self.data)
+			self.response = conn.getRequestData(self.data)
+			print('Reponse: ' , self.response)
+			self.request.sendall(str.encode(self.response))
+		else:
+			print("not allowerd from: " + getClientAddress)
 
 class MyRequest():
 
