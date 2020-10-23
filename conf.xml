@@ -1,11 +1,12 @@
 <?xml version="1.0"?>
 
 <settings>
-	<address>192.168.10.129</address>
+	<address>192.168.30.133</address>
 	<port>60000</port>
 	<debug>1</debug>
 	<hosts>
-		<host address="192.168.250.1"></host>
-		<host address="192.168.250.2"></host>	
+		<host>192.168.250.1</host>
+		<host>192.168.250.2</host>
+		<host>192.168.30.133</host>		
 	</hosts>
 </settings>
